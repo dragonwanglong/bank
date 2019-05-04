@@ -1,0 +1,37 @@
+
+spring:
+  profiles: test
+
+eureka:
+  client:
+    # register-with-eureka: true
+    #fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}
+    prefer-ip-address: true
+
+
+zuul:
+  PreFilter:
+    pre:
+      disable: false
+  sensitive-headers: Cookie,Set-Cookie  #��������ͷ
+  retryable: false #�Ƿ�����
+  prefix: /api #ͳһ����ǰ׺
+  hosts:
+    connect-timeout-millis: 6000  #�������ӵĳ�ʱʱ��
+    connection-request-timeout-millis: 4000 #һ������ĳ�ʱʱ��
+  routes: #·�ɹ���
+    clientb:
+      path: /clb/**
+      sensitive-headers:
+      instance-id: clientb
+    clientc:
+      path: /clc/**
+      sensitive-headers:
+      instance-id: clientc
+  ignored-services: "*" #����������΢����������
+
